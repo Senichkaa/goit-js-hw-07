@@ -26,9 +26,26 @@ function onClick(event) {
   if (event.target.nodeName !== "IMG") {
     return;
   }
-  const instance = basicLightbox.create(`
-    <img src="${event.target.dataset.source}" width="800" height="600">`);
+  const instance = basicLightbox.create(
+    `
+    <img src="${event.target.dataset.source}" width="800" height="600">`,
+    {
+      onShow: () => {
+        window.addEventListener("keydown", escClick);
+      },
+      onClose: () => {
+        window.removeEventListener("keydown", escClick);
+      },
+    }
+  );
 
   instance.show();
+
+  function escClick(event) {
+    if (event.code === "Escape") {
+      instance.close();
+    }
+  }
 }
+
 console.log(galleryItems);
